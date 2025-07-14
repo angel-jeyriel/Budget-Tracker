@@ -1,0 +1,27 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Category extends Model
+{
+    protected $fillable = ['user_id', 'name'];
+
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public static function scopeForUser($query)
+    {
+        return $query->where(function ($query) {
+            $query->where('user_id', auth()->id())->orWhereNull('user_id');
+        });
+    }
+}

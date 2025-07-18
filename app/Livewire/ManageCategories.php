@@ -34,7 +34,7 @@ class ManageCategories extends Component
 
     public function render()
     {
-        $categories = Category::where('user_id', auth()->id())->get();
+        $categories = Category::forUser()->get();
         return view('livewire.manage-categories', compact('categories'));
     }
 }

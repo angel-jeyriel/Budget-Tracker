@@ -39,10 +39,10 @@
         </div>
         <button wire:click="save" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Add Budget</button>
     </div>
-    <div class="mt-6">
+    <div class="mt-6 w-lg m-auto">
         <h3 class="text-lg font-semibold mb-2">Your Budgets</h3>
-        <ul class="m-auto w-lg">
-            @foreach ($budgets as $budget)
+        <ul>
+            @forelse ($budgets as $budget)
             <li class="flex justify-between items-center bg-gray-50 p-2 rounded">
                 <div><span class="font-bold">{{ $budget->category->name }}:</span> ${{
                     number_format($budget->amount, 2) }} ({{ $budget->start_date }}
@@ -50,7 +50,9 @@
                 <div wire:click="delete({{ $budget->id }})" class="mx-1">
                     @include('icons.delete-logo')</div>
             </li>
-            @endforeach
+            @empty
+            <p class="text-sm text-gray-800">You currently have no budget</p>
+            @endforelse
         </ul>
     </div>
 </div>

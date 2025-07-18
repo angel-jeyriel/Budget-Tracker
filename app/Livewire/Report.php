@@ -27,6 +27,13 @@ class Report extends Component
         $this->category_id = '';
     }
 
+    public function delete($id)
+    {
+        $transaction = Transaction::forUser()->findOrFail($id);
+        $transaction->delete();
+        session()->flash('message', 'Transaction deleted successfully!');
+    }
+
     public function updated($propertyName)
     {
         try {
@@ -45,7 +52,7 @@ class Report extends Component
 
     public function render()
     {
-        $query = Transaction::query()->with('category');
+        $query = Transaction::forUser()->with('category');
 
         if ($this->start_date) {
             $query->where('transaction_date', '>=', $this->start_date);
@@ -67,7 +74,22 @@ class Report extends Component
         $chartData = [
             'labels' => $categories->pluck('name')->toArray(),
             'data' => $categories->map(function ($category) use ($query) {
-                return $query->where('category_id', $category->id)->sum('amount');
+                $categoryQuery = Transaction::forUser()
+                    ->where('category_id', $category->id);
+
+                if ($this->start_date) {
+                    $categoryQuery->where('transaction_date', '>=', $this->start_date);
+                }
+
+                if ($this->end_date) {
+                    $categoryQuery->where('transaction_date', '<=', $this->end_date);
+                }
+
+                if ($this->category_id) {
+                    $categoryQuery->where('category_id', $this->category_id);
+                }
+
+                return $categoryQuery->sum('amount');
             })->toArray(),
         ];
 

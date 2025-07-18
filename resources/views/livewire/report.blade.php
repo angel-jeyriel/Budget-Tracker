@@ -40,70 +40,41 @@
         </div>
     </div>
 
-    <!-- Chart -->
-    {{-- <div class="mb-6">
-        <canvas id="expenseChart" class="w-full h-64"></canvas>
-        <script>
-            document.addEventListener('livewire:navigated', () => {
-                        const ctx = document.getElementById('expenseChart').getContext('2d');
-                        new Chart(ctx, {
-                            type: 'bar',
-                            data: {
-                                labels: @json($chartData['labels']),
-                                datasets: [{
-                                    label: 'Expenses by Category',
-                                    data: @json($chartData['data']),
-                                    backgroundColor: 'rgba(59, 130, 246, 0.5)',
-                                    borderColor: 'rgba(59, 130, 246, 1)',
-                                    borderWidth: 1,
-                                }],
-                            },
-                            options: {
-                                scales: {
-                                    y: {
-                                        beginAtZero: true,
-                                    },
-                                },
-                            },
-                        });
-                    });
-        </script>
-    </div> --}}
-
-    <!-- Chart -->
+    {{-- Chart --}}
     <div class="mb-6">
         <canvas id="expenseChart" class="w-full h-64"></canvas>
         <script>
             document.addEventListener('livewire:init', () => {
-                    let chartInstance = null;
-                    Livewire.on('updateChart', ({ labels, data }) => {
-                        const ctx = document.getElementById('expenseChart').getContext('2d');
-                        if (chartInstance) {
-                            chartInstance.destroy();
-                        }
-                        chartInstance = new Chart(ctx, {
-                            type: 'bar',
-                            data: {
-                                labels: labels,
-                                datasets: [{
-                                    label: 'Expenses by Category',
-                                    data: data,
-                                    backgroundColor: 'rgba(59, 130, 246, 0.5)',
-                                    borderColor: 'rgba(59, 130, 246, 1)',
-                                    borderWidth: 1,
-                                }],
-                            },
-                            options: {
-                                scales: {
-                                    y: {
-                                        beginAtZero: true,
-                                    },
+                let chartInstance = null;
+                Livewire.on('updateChart', ({ labels, data }) => {
+                    console.log('Chart Data:', { labels, data });
+                    const ctx = document.getElementById('expenseChart').getContext('2d');
+                    if (chartInstance) {
+                        chartInstance.destroy();
+                    }
+                    chartInstance = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                label: 'Categories',
+                                data: data,
+                                backgroundColor: 'rgba(59, 130, 246, 0.5)',
+                                borderColor: 'rgba(59, 130, 246, 1.0)',
+                                borderWidth: 1,
+                            }],
+                        },
+                        options: {
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
                                 },
                             },
-                        });
+                        },
                     });
-                    Livewire.dispatch('updateChart', { labels: @json($chartData['labels']), data: @json($chartData['data']) });
                 });
+                Livewire.dispatch('updateChart', { labels: @json($chartData['labels']), data: @json($chartData['data']) });
+            });
         </script>
     </div>
 
@@ -121,7 +92,7 @@
                     $budget->end_date])->sum('amount'), 2) }}</p>
             </div>
             @empty
-            <p class="text-sm">No budget created yet.</p>
+            <p class="text-sm">No budget created yet. <a href="{{route('budgets')}}">Create new Budget</a></p>
             @endforelse
         </div>
     </div>
@@ -164,7 +135,8 @@
                     <td class="flex py-4 px-4 text-sm text-gray-900">
                         <a href="{{ route('edit-transaction', $transaction->id) }}"
                             class="mx-1">@include('icons.edit-logo')</a>
-                        <div wire:click="$dispatch('delete-transaction', { id: {{ $transaction->id }} })" class="mx-1">
+                        <div wire:click="delete({{ $transaction->id }})" wire:confirm="Are you sure you want to delete?"
+                            class="mx-1 cursor-pointer">
                             @include('icons.delete-logo')</div>
                     </td>
                 </tr>

@@ -44,13 +44,13 @@ class EditTransaction extends Component
         return redirect()->route('report');
     }
 
-    public function delete()
-    {
-        $transaction = Transaction::forUser()->findOrFail($this->transactionId);
-        $transaction->delete();
-        session()->flash('message', 'Transaction deleted successfully!');
-        return redirect()->route('report');
-    }
+    // public function delete()
+    // {
+    //     $transaction = Transaction::forUser()->findOrFail($this->transactionId);
+    //     $transaction->delete();
+    //     session()->flash('message', 'Transaction deleted successfully!');
+    //     return redirect()->route('report');
+    // }
 
     public function render()
     {

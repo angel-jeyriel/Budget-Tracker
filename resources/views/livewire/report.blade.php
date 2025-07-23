@@ -12,19 +12,19 @@
             <div class="flex-1">
                 <label for="start_date" class="block text-sm font-medium text-gray-700">Start Date</label>
                 <input wire:model.live="start_date" type="date" id="start_date"
-                    class="mt-1 block p-1 rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                    class="m-1 p-2 block max-w-md border rounded-md border-gray-400 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200">
                 @error('start_date') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
             </div>
             <div class="flex-1">
                 <label for="end_date" class="block text-sm font-medium text-gray-700">End Date</label>
                 <input wire:model.live="end_date" type="date" id="end_date"
-                    class="mt-1 block p-1 rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                    class="m-1 p-2 block max-w-md border rounded-md border-gray-400 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200">
                 @error('end_date') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
             </div>
             <div class="flex-1">
                 <label for="category_id" class="block text-sm font-medium text-gray-700">Category</label>
                 <select wire:model.live="category_id" id="category_id"
-                    class="mt-1 block rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                    class="m-1 p-2 block max-w-md border rounded-md border-gray-400 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200">
                     <option value="">All Categories</option>
                     @foreach ($categories as $category)
                     <option value="{{ $category->id }}">{{ $category->name }}</option>
@@ -40,11 +40,12 @@
         </div>
     </div>
 
-    {{-- Chart --}}
-    <div class="mb-6">
-        <canvas id="expenseChart" class="w-full h-64"></canvas>
-        <script>
-            document.addEventListener('livewire:init', () => {
+    <div class="flex mb-6 w-full md:flex-col">
+        {{-- Chart --}}
+        <div class="flex-2/3 w-60">
+            <canvas id="expenseChart" class=" p-2 m-2 shadow-[0_2px_4px_rgba(0,0,0,0.2)]"></canvas>
+            <script>
+                document.addEventListener('livewire:init', () => {
                 let chartInstance = null;
                 Livewire.on('updateChart', ({ labels, data }) => {
                     console.log('Chart Data:', { labels, data });
@@ -75,25 +76,29 @@
                 });
                 Livewire.dispatch('updateChart', { labels: @json($chartData['labels']), data: @json($chartData['data']) });
             });
-        </script>
-    </div>
+            </script>
+        </div>
 
-    {{-- Budget Information --}}
-    <div class="mb-6">
-        <h3 class="text-lg font-semibold mb-2">Budgets</h3>
-        <div class="flex">
-            @forelse (\App\Models\Budget::where('user_id', auth()->id())->with('category')->get() as $budget)
-            <div class="bg-gray-50 p-4 rounded m-2">
-                <p><strong>Category:</strong> <span class="uppercase">{{ $budget->category->name }}</span></p>
-                <p><strong>Budget:</strong> ${{ number_format($budget->amount, 2) }}</p>
-                <p><strong>Period:</strong> {{ $budget->start_date }} to {{ $budget->end_date }}</p>
-                <p><strong>Spent:</strong> ${{ number_format(\App\Models\Transaction::forUser()->where('category_id',
-                    $budget->category_id)->whereBetween('transaction_date', [$budget->start_date,
-                    $budget->end_date])->sum('amount'), 2) }}</p>
+        {{-- Budget Information --}}
+        <div class="flex-1/3 m-2">
+            <h3 class="text-lg font-semibold mb-2">Budgets</h3>
+            <div class="flex flex-col">
+                @forelse (\App\Models\Budget::where('user_id', auth()->id())->with('category')->get() as $budget)
+                <div class="bg-gray-50 p-3 rounded m-2 shadow-[0_2px_4px_rgba(0,0,0,0.2)]">
+                    <p><strong>Category:</strong> <span class="uppercase">{{ $budget->category->name }}</span></p>
+                    <p><strong>Budget:</strong> ${{ number_format($budget->amount, 2) }}</p>
+                    <p><strong>Period:</strong> {{ $budget->start_date }} to {{ $budget->end_date }}</p>
+                    <p><strong>Spent:</strong> ${{
+                        number_format(\App\Models\Transaction::forUser()->where('category_id',
+                        $budget->category_id)->whereBetween('transaction_date', [$budget->start_date,
+                        $budget->end_date])->sum('amount'), 2) }}</p>
+                </div>
+                @empty
+                <p class="text-sm">No budget created yet. <a href="{{route('budgets')}}"
+                        class="border rounded-md p-1">Create new Budget</a>
+                </p>
+                @endforelse
             </div>
-            @empty
-            <p class="text-sm">No budget created yet. <a href="{{route('budgets')}}">Create new Budget</a></p>
-            @endforelse
         </div>
     </div>
 

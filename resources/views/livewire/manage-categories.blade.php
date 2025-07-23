@@ -11,22 +11,25 @@
         <div>
             <label for="name" class="block text-sm font-medium text-gray-700">Category Name</label>
             <input wire:model="name" type="text" id="name"
-                class="my-2 p-1 block w-full rounded-md border-gray-300 bg-gray-200 shadow-[0_2px_4px_rgba(0,0,0,0.2)] focus:border-blue-300 focus:ring focus:ring-blue-200">
+                class="mt-1 p-1 block w-full border rounded-md border-gray-400 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200">
             @error('name') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
         </div>
-        <button wire:click="save" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Save
+        <button wire:click="save" class="bg-blue-600 text-white px-4 py-2 mt-4 rounded hover:bg-blue-700">Save
             Category</button>
     </div>
-    <div class="mt-6">
+    <div class="mt-6 w-lg m-auto">
         <h3 class="text-lg font-semibold mb-2">Your Categories</h3>
-        <ul class="m-auto w-md">
-            @foreach ($categories as $category)
+        <ul>
+            @forelse ($categories as $category)
             <li class="flex justify-between items-center bg-gray-50 p-2 rounded">
                 <span>{{ $category->name }}</span>
-                <div wire:click="delete({{ $category->id }})" class="mx-1">
+                <div wire:click="delete({{ $category->id }})" wire:confirm="Are you sure you want to delete?"
+                    class="mx-1">
                     @include('icons.delete-logo')</div>
             </li>
-            @endforeach
+            @empty
+            <p class="text-sm text-gray-800">No Categories created yet.</p>
+            @endforelse
         </ul>
     </div>
 </div>

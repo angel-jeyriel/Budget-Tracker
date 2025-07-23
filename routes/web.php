@@ -10,19 +10,20 @@ use App\Livewire\Settings\Password;
 use App\Livewire\Settings\Profile;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('homepage');
-})->name('home');
+// Route::get('/', function () {
+//     return view('homepage');
+// })->name('home')->middleware(['auth']);
 
-Route::get('/welcome', function () {
-    return view('welcome');
-})->name('welcome');
+// Route::get('/welcome', function () {
+//     return view('welcome');
+// })->name('welcome');
 
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 
 Route::middleware(['auth'])->group(function () {
+    Route::get('/', Report::class)->name('home');
     Route::get('/add', AddTransaction::class)->name('add-transaction');
     Route::get('/{transactionId}/edit', EditTransaction::class)->name('edit-transaction');
     Route::get('/report', Report::class)->name('report');

@@ -45,14 +45,17 @@
         <div class="flex-2/3 w-60 md:w-full">
             <canvas id="expenseChart" class=" p-2 m-2 shadow-[0_2px_4px_rgba(0,0,0,0.2)]"></canvas>
             <script>
-                document.addEventListener('livewire:init', () => {
                 let chartInstance = null;
-                Livewire.on('updateChart', ({ labels, data }) => {
-                    console.log('Chart Data:', { labels, data });
-                    const ctx = document.getElementById('expenseChart').getContext('2d');
+            
+                function renderExpenseChart(labels, data) {
+                    const canvas = document.getElementById('expenseChart');
+                    if (!canvas) return;
+            
+                    const ctx = canvas.getContext('2d');
                     if (chartInstance) {
                         chartInstance.destroy();
                     }
+            
                     chartInstance = new Chart(ctx, {
                         type: 'bar',
                         data: {
@@ -73,9 +76,26 @@
                             },
                         },
                     });
+                }
+            
+                function initChartFromLivewire() {
+                    Livewire.dispatch('updateChart', {
+                        labels: @json($chartData['labels']),
+                        data: @json($chartData['data']),
+                    });
+                }
+            
+                document.addEventListener('livewire:navigated', () => {
+                    initChartFromLivewire();
                 });
-                Livewire.dispatch('updateChart', { labels: @json($chartData['labels']), data: @json($chartData['data']) });
-            });
+            
+                document.addEventListener('DOMContentLoaded', () => {
+                    Livewire.on('updateChart', ({ labels, data }) => {
+                        renderExpenseChart(labels, data);
+                    });
+            
+                    initChartFromLivewire();
+                });
             </script>
         </div>
 
@@ -138,8 +158,8 @@
                     <td class="py-4 px-4 text-sm text-gray-900">{{ $transaction->category->name }}</td>
                     <td class="py-4 px-4 text-sm text-gray-900">{{ $transaction->transaction_date }}</td>
                     <td class="flex py-4 px-4 text-sm text-gray-900">
-                        <a href="{{ route('edit-transaction', $transaction->id) }}"
-                            class="mx-1">@include('icons.edit-logo')</a>
+                        <a href="{{ route('edit-transaction', $transaction->id) }}" class="mx-1"
+                            wire:navigate>@include('icons.edit-logo')</a>
                         <div wire:click="delete({{ $transaction->id }})" wire:confirm="Are you sure you want to delete?"
                             class="mx-1 cursor-pointer">
                             @include('icons.delete-logo')</div>

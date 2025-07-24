@@ -8,23 +8,23 @@
         href="{{ route('add-transaction') }}" wire:navigate>@include('icons.add-logo') New Transaction</a>
     <h2 class="text-xl font-semibold mb-4">Expense Report</h2>
     <div class="mb-6 space-y-4">
-        <div class="flex flex-row md:flex-row md:space-x-4 space-y-4 md:space-y-0">
+        <div class="flex flex-wrap md:space-x-4 space-y-4 md:space-y-0">
             <div class="flex-1">
                 <label for="start_date" class="block text-sm font-medium text-gray-700">Start Date</label>
                 <input wire:model.live="start_date" type="date" id="start_date"
-                    class="m-1 p-2 block max-w-md border rounded-md border-gray-400 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200">
+                    class="m-1 p-2 block w-[13rem] border rounded-md border-gray-400 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200">
                 @error('start_date') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
             </div>
             <div class="flex-1">
                 <label for="end_date" class="block text-sm font-medium text-gray-700">End Date</label>
                 <input wire:model.live="end_date" type="date" id="end_date"
-                    class="m-1 p-2 block max-w-md border rounded-md border-gray-400 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200">
+                    class="m-1 p-2 block w-[13rem] border rounded-md border-gray-400 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200">
                 @error('end_date') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
             </div>
             <div class="flex-1">
                 <label for="category_id" class="block text-sm font-medium text-gray-700">Category</label>
                 <select wire:model.live="category_id" id="category_id"
-                    class="m-1 p-2 block max-w-md border rounded-md border-gray-400 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200">
+                    class="m-1 p-2 block w-[13rem] border rounded-md border-gray-400 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200">
                     <option value="">All Categories</option>
                     @foreach ($categories as $category)
                     <option value="{{ $category->id }}">{{ $category->name }}</option>

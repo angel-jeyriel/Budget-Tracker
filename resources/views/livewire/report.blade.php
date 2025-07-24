@@ -42,7 +42,7 @@
 
     <div class="flex mb-6 w-full md:flex-col">
         {{-- Chart --}}
-        <div class="flex-2/3 w-60">
+        <div class="flex-2/3 w-60 md:w-full">
             <canvas id="expenseChart" class=" p-2 m-2 shadow-[0_2px_4px_rgba(0,0,0,0.2)]"></canvas>
             <script>
                 document.addEventListener('livewire:init', () => {
@@ -80,7 +80,7 @@
         </div>
 
         {{-- Budget Information --}}
-        <div class="flex-1/3 m-2">
+        <div class="flex-1/3 m-2 md:w-full">
             <h3 class="text-lg font-semibold mb-2">Budgets</h3>
             <div class="flex flex-col">
                 @forelse (\App\Models\Budget::where('user_id', auth()->id())->with('category')->get() as $budget)

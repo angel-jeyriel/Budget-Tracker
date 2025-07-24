@@ -7,6 +7,7 @@
     @endif
     <a class="flex bg-blue-600 w-[5.5rem] justify-between text-sm text-white text-sm my-3 px-4 py-2 rounded hover:bg-blue-700"
         href="{{ route('report') }}" wire:navigate>@include('icons.back-logo') Back</a>
+    @if (count($categories) > 0)
     <div class="space-y-4">
         <div class="flex flex-row mt-4 md:flex-row md:space-x-4 space-y-4 md:space-y-0">
             <div class="flex-1 m-2">
@@ -44,6 +45,13 @@
         <button wire:click="save" class="bg-blue-600 text-white px-4 py-2 mt-4 rounded hover:bg-blue-700">Add
             Budget</button>
     </div>
+    @else
+    <div class="mt-2 flex justify-center">
+        <p class="text-lg">Categories are necessary for creating new Budgets. <a href="{{route('categories')}}"
+                class="border rounded-md p-1">Create a new Category.</a>
+        </p>
+    </div>
+    @endif
     <div class="mt-6 w-lg m-auto">
         <h3 class="text-lg font-semibold mb-2">Your Budgets</h3>
         <ul>

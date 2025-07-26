@@ -4,6 +4,8 @@
         {{ session('message') }}
     </div>
     @endif
+    <div id="notification-trigger" data-messages='@json(auth()->user()?->unreadNotifications->pluck("data.message"))'>
+    </div>
     <a class="flex bg-blue-600 w-[10.5rem] justify-between text-sm text-white mr-auto content-end my-3 px-4 py-2 rounded hover:bg-blue-700"
         href="{{ route('add-transaction') }}" wire:navigate>@include('icons.add-logo') New Transaction</a>
     <h2 class="text-xl font-semibold mb-4">Expense Report</h2>

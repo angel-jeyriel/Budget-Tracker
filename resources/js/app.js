@@ -4,7 +4,8 @@ window.Chart = Chart;
 
 // Notification handler
 Livewire.on('open-notifications', () => {
-    const messages = @json(auth() -> user() ? auth() -> user() -> unreadNotifications -> pluck('data.message') : []);
+    const trigger = document.getElementById('notification-trigger');
+    const messages = trigger ? JSON.parse(trigger.dataset.messages) : [];
 
     alert('Notifications: ' + (messages.length ? messages.join('\n') : 'No new notifications'));
 

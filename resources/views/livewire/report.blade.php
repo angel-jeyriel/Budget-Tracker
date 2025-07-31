@@ -42,7 +42,7 @@
         </div>
     </div>
 
-    <div class="flex mb-6 w-full md:flex-col">
+    <div class="flex flex-col mb-6 w-full md:flex-row">
         {{-- Chart --}}
         <div class="flex-2/3 w-60 md:w-full">
             <canvas id="expenseChart" class=" p-2 m-2 shadow-[0_2px_4px_rgba(0,0,0,0.2)]"></canvas>

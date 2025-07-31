@@ -1,4 +1,4 @@
-# Expense Tracker
+# Budget Tracker
 
 A web-based application for tracking personal expenses, built with **Laravel 12**, **Livewire**, **Tailwind CSS**, **Alpine.js**, and **Chart.js**. Features include adding and editing transactions, managing categories and budgets, visualizing expenses with charts, and handling recurring expenses with automated notifications.
 
